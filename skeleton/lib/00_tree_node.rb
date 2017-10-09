@@ -3,6 +3,7 @@ class PolyTreeNode
     @parent = nil
     @children = []
     @value = value
+    @depth = 0
   end
 
   def parent  # method that returns the node's partent
@@ -17,6 +18,10 @@ class PolyTreeNode
     @value
   end
 
+  def depth
+    @depth
+  end
+
   def parent=(new_parent)  # method which (1) sets the parent property and (2) adds
     # the node to their parent's array of children (unless we're setting parent to nil).
 
@@ -25,7 +30,11 @@ class PolyTreeNode
     end
 
     @parent = new_parent
-    return @parent if !@parent #needed to be back
+    if !@parent #needed to be back
+      @depth = 0
+      return @parent
+    end
+    @depth = @parent.depth + 1
     @parent.children.push(self) unless @parent.children.include?(self)
   end
 
