@@ -40,8 +40,12 @@ class KnightPathFinder
     end
   end
 
+  def find_node(pos)
+    @move_tree.bfs(pos)
+  end
+
   def find_path(pos)
-    target_node = @move_tree.bfs(pos)
+    target_node = find_node(pos)
     trace_path_back(target_node)
   end
 
@@ -53,4 +57,23 @@ class KnightPathFinder
     end
     ret_val.reverse
   end
+
+  def get_depth_board
+    build_move_tree
+    depth = Array.new(8){ Array.new(8){ [] } }
+    (0..7).each do |x|
+      (0..7).each do |y|
+        depth[x][y] = find_node([x,y]).depth
+      end
+    end
+    depth
+  end
+
+  def render_board
+    depth = get_depth_board
+    depth.each do |row|
+      p row
+    end
+  end
+
 end
