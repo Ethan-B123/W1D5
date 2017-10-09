@@ -1,6 +1,7 @@
 require_relative 'skeleton/lib/00_tree_node.rb'
 
 class KnightPathFinder
+  attr_reader :move_tree
   def initialize(position = [0,0])
     @move_tree = PolyTreeNode.new(position)
     @position = position
@@ -26,17 +27,30 @@ class KnightPathFinder
   end
 
   def build_move_tree
-
+    @move_tree
+    queue = [@move_tree]
+    until queue.empty?
+      grow_from = queue.shift
+      moves_possible = new_move_positions(grow_from.value)
+      moves_possible.each do |new_spot|
+        working_node = PolyTreeNode.new(new_spot)
+        working_node.parent = grow_from
+        queue << working_node
+      end
+    end
   end
 
+  def find_path(pos)
+    target_node = @move_tree.bfs(pos)
+    trace_path_back(target_node)
+  end
 
+  def trace_path_back(node)
+    parent, ret_val = node.parent, [node.value]
+    while parent
+      ret_val << parent.value
+      parent = parent.parent
+    end
+    ret_val.reverse
+  end
 end
-
-knight = KnightPathFinder.new
-
-p knight.new_move_positions([1,1])
-
-#
-# if __file__ == $PROGRAM_NAME
-#
-# end

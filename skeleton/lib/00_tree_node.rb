@@ -69,4 +69,13 @@ class PolyTreeNode
 
     nil
   end
+
+  def bf_each(&prc)
+    queue = [self]
+    until queue.empty?
+      node = queue.shift
+      prc.call(node)
+      queue.concat(node.children)
+    end
+  end
 end
